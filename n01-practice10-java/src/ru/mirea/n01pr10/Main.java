@@ -3,20 +3,36 @@ package ru.mirea.n01pr10;
 public class Main {
 
     public static void main(String[] args) {
+    	System.out.println("Binary tree:");
 		Treeable<Integer> binaryTree = new BinaryTree<>();
-		binaryTree.add(5);
-		binaryTree.add(35);
-		binaryTree.add(1);
-		binaryTree.add(20);
-		binaryTree.add(4);
-		binaryTree.add(17);
-		binaryTree.add(31);
-		binaryTree.add(99);
-		binaryTree.add(18);
-		binaryTree.add(19);
+		fillTree(binaryTree);
 		binaryTree.print();
-		System.out.println("\n-----\n");
+		System.out.println("\n-----");
+		System.out.println("Delete 4 in binary tree:");
 		binaryTree.delete(4);
 		binaryTree.print();
+
+		System.out.println("\n-----");
+		System.out.println("AVL tree:");
+		Treeable<Integer> avlTree = new AVLTree<>();;
+		fillTree(avlTree);
+		avlTree.print();
+		System.out.println("\n-----");
+		System.out.println("Delete 5 in avl tree:");
+		avlTree.delete(5);
+		avlTree.print();
     }
+
+    public static void fillTree(Treeable<Integer> tree) {
+		tree.add(5);
+		tree.add(35);
+		tree.add(1);
+		tree.add(20);
+		tree.add(4);
+		tree.add(17);
+		tree.add(31);
+		tree.add(99);
+		tree.add(18);
+		tree.add(19);
+	}
 }

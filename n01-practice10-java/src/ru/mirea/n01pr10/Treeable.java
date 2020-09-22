@@ -5,4 +5,5 @@ public interface Treeable<T> {
 	boolean contains(T value);
 	void delete(T value);
 	void print();
+	boolean isEmpty();
 }

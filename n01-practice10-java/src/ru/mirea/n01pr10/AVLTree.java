@@ -1,10 +1,11 @@
 package ru.mirea.n01pr10;
 
-public class BinaryTree<T extends Comparable<T>> implements Treeable<T> {
+public class AVLTree<T extends Comparable<T>> implements Treeable<T> {
 	private Node root;
 
 	class Node {
 		T value;
+		int height;
 		Node left;
 		Node right;
 
@@ -18,10 +19,10 @@ public class BinaryTree<T extends Comparable<T>> implements Treeable<T> {
 		}
 	}
 
-	public BinaryTree() {
+	public AVLTree() {
 	}
 
-	public BinaryTree(T value) {
+	public AVLTree(T value) {
 		this.root = new Node(value);
 	}
 
@@ -39,7 +40,7 @@ public class BinaryTree<T extends Comparable<T>> implements Treeable<T> {
 			current.right = add(current.right, value);
 		}
 
-		return current;
+		return rebalance(current);
 	}
 
 	@Override
@@ -84,7 +85,7 @@ public class BinaryTree<T extends Comparable<T>> implements Treeable<T> {
 			}
 		}
 
-		return current;
+		return rebalance(current);
 	}
 
 	private Node findSmallestNode(Node current) {
@@ -112,5 +113,58 @@ public class BinaryTree<T extends Comparable<T>> implements Treeable<T> {
 	@Override
 	public boolean isEmpty() {
 		return root == null;
+	}
+
+	private Node rotateLeft(Node y) {
+		Node x = y.right;
+		Node z = x.left;
+		x.left = y;
+		y.right = z;
+		updateHeight(y);
+		updateHeight(x);
+		return x;
+	}
+
+	private Node rotateRight(Node y) {
+		Node x = y.left;
+		Node z = x.right;
+		x.right = y;
+		y.left = z;
+		updateHeight(y);
+		updateHeight(x);
+		return x;
+	}
+
+	private Node rebalance(Node z) {
+		updateHeight(z);
+		int balance = getBalance(z);
+
+		if (balance > 1) {
+			if (getHeight(z.right.right) <= getHeight(z.right.left)) {
+				z.right = rotateRight(z.right);
+			}
+
+			z = rotateLeft(z);
+		} else if (balance < -1) {
+			if (getHeight(z.left.left) <= getHeight(z.left.right)) {
+				z.left = rotateLeft(z.left);
+			}
+
+			z = rotateRight(z);
+		}
+
+		return z;
+	}
+
+	private int getHeight(Node current) {
+		return current != null ? current.height : -1;
+	}
+
+	private void updateHeight(Node current) {
+		current.height = 1 + Math.max(getHeight(current.left), getHeight(current.right));
+	}
+
+	private int getBalance(Node current) {
+		return (current == null) ? 0 : getHeight(current.right) - getHeight(current.left);
 	}
 }
