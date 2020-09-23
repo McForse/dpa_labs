@@ -1,6 +1,8 @@
-package ru.mirea.n01pr9;
+package ru.mirea.n01pr9.queue;
 
-public class Queue<T> {
+import ru.mirea.n01pr9.Queueable;
+
+public class Queue<T> implements Queueable<T> {
 	protected Node first, last;
 	protected int size;
 	protected final int capacity;
@@ -27,9 +29,10 @@ public class Queue<T> {
 		this.capacity = capacity;
 	}
 
-	public boolean add(T object) {
+	@Override
+	public boolean add(T item) {
 		if (size < capacity) {
-			Node node = new Node(object);
+			Node node = new Node(item);
 
 			if (first == null) {
 				last = node;
@@ -46,6 +49,7 @@ public class Queue<T> {
 		return false;
 	}
 
+	@Override
 	public T remove() {
 		if (first == null) {
 			return null;
@@ -63,10 +67,12 @@ public class Queue<T> {
 		}
 	}
 
+	@Override
 	public T peek() {
 		return first.value;
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return first == null;
 	}

@@ -1,4 +1,4 @@
-package ru.mirea.n01pr9;
+package ru.mirea.n01pr9.queue;
 
 import java.util.Comparator;
 
@@ -15,9 +15,9 @@ public class PriorityQueue<T> extends Queue<T> {
 	}
 
 	@Override
-	public boolean add(T object) {
+	public boolean add(T item) {
 		if (size < capacity) {
-			Node node = new Node(object);
+			Node node = new Node(item);
 
 			if (first == null) {
 				last = node;
@@ -25,7 +25,7 @@ public class PriorityQueue<T> extends Queue<T> {
 			} else {
 				Node temp = first;
 
-				while (temp != null && comparator.compare(temp.value, object) >= 0) {
+				while (temp != null && comparator.compare(temp.value, item) >= 0) {
 					temp = temp.next;
 				}
 
@@ -35,7 +35,7 @@ public class PriorityQueue<T> extends Queue<T> {
 				} else {
 					T bufValue = temp.value;
 					Node bufNext = temp.next;
-					temp.value = object;
+					temp.value = item;
 					temp.next = new Node(bufNext, bufValue);
 				}
 			}

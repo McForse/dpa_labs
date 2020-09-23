@@ -1,19 +1,24 @@
 package ru.mirea.n01pr9;
 
+import ru.mirea.n01pr9.queue.PriorityQueue;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Main {
 
     public static void main(String[] args) {
-		PriorityQueue<Request> queue = new PriorityQueue<>(new RequestComparator());
+		Queueable<Request> queue = new PriorityQueue<>(new RequestComparator());
 		queue.add(new Request(EmployeeCategory.K, 1, 5));
 		queue.add(new Request(EmployeeCategory.K, 2, 10));
 		queue.add(new Request(EmployeeCategory.M, 3, 5));
 		queue.add(new Request(EmployeeCategory.P, 4, 5));
 		queue.add(new Request(EmployeeCategory.P, 4, 15));
 		queue.add(new Request(EmployeeCategory.M, 4, 15));
+		printData(queue);
+    }
 
+    public static void printData(Queueable<Request> queue) {
 		Map<EmployeeCategory, Integer> timeMap = new HashMap<>();
 
 		System.out.println("Requests:\n");
@@ -34,5 +39,5 @@ public class Main {
 					entry.getValue()
 			);
 		}
-    }
+	}
 }
