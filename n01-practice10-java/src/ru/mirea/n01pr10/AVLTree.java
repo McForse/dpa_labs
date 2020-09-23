@@ -1,5 +1,8 @@
 package ru.mirea.n01pr10;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AVLTree<T extends Comparable<T>> implements Treeable<T> {
 	private Node root;
 
@@ -79,9 +82,9 @@ public class AVLTree<T extends Comparable<T>> implements Treeable<T> {
 			} else if (current.left == null) { // Only 1 child (right)
 				current = current.right;
 			} else { // 2 children
-				Node smallestNode = findSmallestNode(current.left);
+				Node smallestNode = findSmallestNode(current.right);
 				current.value = smallestNode.value;
-				current.left = delete(current.left, smallestNode.value);
+				current.right = delete(current.right, smallestNode.value);
 			}
 		}
 
@@ -107,6 +110,25 @@ public class AVLTree<T extends Comparable<T>> implements Treeable<T> {
 
 			System.out.println(current);
 			print(current.right, level + 1);
+		}
+	}
+
+	@Override
+	public List<T> toArray() {
+		ArrayList<T> list = new ArrayList<>();
+		infixTraversal(root, list);
+		return list;
+	}
+
+	private void infixTraversal(Node current, ArrayList<T> list) {
+		if (current.left != null) {
+			infixTraversal(current.left, list);
+		}
+
+		list.add(current.value);
+
+		if (current.right != null) {
+			infixTraversal(current.right, list);
 		}
 	}
 
