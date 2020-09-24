@@ -3,7 +3,6 @@ package ru.mirea.n01pr10;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class RBTree<T extends Comparable<T>> implements Treeable<T> {
 	private Node root;
 
@@ -23,7 +22,7 @@ public class RBTree<T extends Comparable<T>> implements Treeable<T> {
 
 		Node(T value) {
 			this.value = value;
-			color = Color.BLACK;
+			color = Color.RED;
 		}
 
 		Node(T value, Color color) {
@@ -39,11 +38,11 @@ public class RBTree<T extends Comparable<T>> implements Treeable<T> {
 
 	@Override
 	public void add(T value) {
-		Node t = new Node(value, Color.RED);
+		Node current = new Node(value);
 
 		if (root == null) {
-			root = t;
-			t.parent = null;
+			root = current;
+			current.parent = null;
 		} else {
 			Node p = root;
 			Node q = null;
@@ -51,99 +50,93 @@ public class RBTree<T extends Comparable<T>> implements Treeable<T> {
 			while (p != null) {
 				q = p;
 
-				if (p.value.compareTo(t.value) < 0) { // p.value < t.value
+				if (p.value.compareTo(current.value) < 0) { // p.value < t.value
 					p = p.right;
 				} else {
 					p = p.left;
 				}
 			}
 
-			t.parent = q;
+			current.parent = q;
 			// добавляем новый элемент красного цвета
-			if (q.value.compareTo(t.value) < 0) { // q.value < t.value
-				q.right = t;
+			if (q.value.compareTo(current.value) < 0) { // q.value < t.value
+				q.right = current;
 			} else {
-				q.left = t;
+				q.left = current;
 			}
 		}
 
-		fixInsertion(t); // проверяем, не нарушены ли свойства красно-черного дерева
+		fixInsertion(current); // проверяем, не нарушены ли свойства красно-черного дерева
 	}
 
-	private void fixInsertion(Node t) {
-		if (t == root) {
-			t.color = Color.BLACK;
+	private void fixInsertion(Node current) {
+		if (current == root) {
+			current.color = Color.BLACK;
 			return;
 		}
-		Node parent = t.parent;
+		Node parent = current.parent;
 
-		// далее все предки упоминаются относительно t
-		while (parent != null && parent.color == Color.RED) { // нарушается свойство 3
-			Node grandfather = getGrandparent(t);
+		while (parent != null && parent.color == Color.RED) { // нарушается свойство (У красного узла родительский узел — чёрный)
+			Node grandfather = getGrandparent(current);
+			Node uncle = getUncle(current);
 
 			if (grandfather == null) {
 				return;
 			}
 
-			if (t.parent == grandfather.left) { // "отец" — левый ребенок
-				Node uncle = getUncle(t);
-
-				if (uncle != null) { // есть "дядя"
-					if (uncle.color == Color.RED) { //"дядя" красный
-						parent.color = Color.BLACK;
-						uncle.color = Color.BLACK;
-						grandfather.color = Color.RED;
-						t = grandfather;
-					}
-				} else { // случай, когда нет "дяди"
-					if (t == parent.right) { // t — правый сын
-						t = parent;
-						grandfather.left = rotateLeft(t);
-					}
-
-					t.parent.color = Color.BLACK;
+			if (current.parent == grandfather.left) { // "отец" — левый ребенок
+				if (uncle != null && uncle.color == Color.RED) { // есть "дядя" и он красный
+					parent.color = Color.BLACK;
+					uncle.color = Color.BLACK;
 					grandfather.color = Color.RED;
+					current = grandfather;
+				} else { // случай, когда нет "дяди"
+					if (current == parent.right) { // current — правый сын
+						current = parent;
+						grandfather.left = rotateLeft(current);
+					}
 
+					current.parent.color = Color.BLACK;
+					grandfather.color = Color.RED;
 					Node gp = grandfather.parent;
+
 					if (gp != null) {
 						gp = rotateRight(grandfather);
-						grandfather = getGrandparent(t);
+						grandfather = getGrandparent(current);
 					} else {
 						root = rotateRight(grandfather);
 					}
+
 					grandfather.left = gp;
 				}
 			} else { // "отец" — правый ребенок
-				Node uncle = getUncle(t);
-
-				if (uncle != null) { // есть "дядя"
-					if (uncle.color == Color.RED) { //"дядя" красный
-						parent.color = Color.BLACK;
-						uncle.color = Color.BLACK;
-						grandfather.color = Color.RED;
-						t = grandfather;
-					}
-				} else { // нет "дяди"
-					if (t == parent.left) { // t — левый ребенок
-						t = t.parent;
-						grandfather.right = rotateRight(t);
-					}
-
-					t.parent.color = Color.BLACK;
+				if (uncle != null && uncle.color == Color.RED) { // есть "дядя" и он красный
+					parent.color = Color.BLACK;
+					uncle.color = Color.BLACK;
 					grandfather.color = Color.RED;
+					current = grandfather;
+				} else { // нет "дяди"
+					if (current == parent.left) { // current — левый ребенок
+						current = current.parent;
+						grandfather.right = rotateRight(current);
+					}
 
+					current.parent.color = Color.BLACK;
+					grandfather.color = Color.RED;
 					Node gp = grandfather.parent;
+
 					if (gp != null) {
 						gp = rotateLeft(grandfather);
-						grandfather = getGrandparent(t);
+						grandfather = getGrandparent(current);
 					} else {
 						root = rotateLeft(grandfather);
 					}
+
 					grandfather.right = gp;
 				}
 			}
 
-			parent = t.parent;
+			parent = current.parent;
 		}
 
 		root.color = Color.BLACK; // восстанавливаем свойство корня
@@ -191,12 +184,50 @@ public class RBTree<T extends Comparable<T>> implements Treeable<T> {
 
 	@Override
 	public boolean contains(T value) {
-		return false;
+		return contains(root, value);
+	}
+
+	public boolean contains(Node current, T value) {
+		if (current == null) {
+			return false;
+		} else if (value.compareTo(current.value) == 0) { // value == current.value
+			return true;
+		}
+
+		// value < current.value
+		return value.compareTo(current.value) < 0 ? contains(current.left, value) : contains(current.right, value);
 	}
 
 	@Override
+	//TODO: other cases
 	public void delete(T value) {
+		Node current = root;
 
+		while (current.value != value) {
+			if (current.value.compareTo(value) < 0) { // current.value < value
+				current = current.right;
+			} else {
+				current = current.left;
+			}
+		}
+
+		// у current нет детей
+		if (current.left == null && current.right == null) {
+			// current — корень
+			if (current == root) {
+				root = null;
+			} else {
+				// ссылку на current у "отца" меняем на null
+				Node parent = current.parent;
+
+				// current в левой ветке "отца"
+				if (current == parent.left) {
+					parent.left = null;
+				} else { // current в правой ветке "отца"
+					parent.right = null;
+				}
+			}
+		}
 	}
 
 	@Override
@@ -241,7 +272,6 @@ public class RBTree<T extends Comparable<T>> implements Treeable<T> {
 		return root == null;
 	}
 
-
 	public static void main(String[] args) {
 		RBTree<Integer> tree = new RBTree<>();
 		tree.add(10);
@@ -258,11 +288,10 @@ public class RBTree<T extends Comparable<T>> implements Treeable<T> {
 		tree.add(8);
 		tree.add(30);
 		tree.add(13);
-		/*tree.insert(18);
-		tree.insert(16);
-		tree.insert(14);
-		tree.insert(3);*/
+		tree.add(18);
+		tree.add(16);
+		tree.add(14);
+		tree.add(3);
 		tree.print();
-		//tree.test();
 	}
 }

@@ -137,26 +137,6 @@ public class AVLTree<T extends Comparable<T>> implements Treeable<T> {
 		return root == null;
 	}
 
-	private Node rotateLeft(Node y) {
-		Node x = y.right;
-		Node z = x.left;
-		x.left = y;
-		y.right = z;
-		updateHeight(y);
-		updateHeight(x);
-		return x;
-	}
-
-	private Node rotateRight(Node y) {
-		Node x = y.left;
-		Node z = x.right;
-		x.right = y;
-		y.left = z;
-		updateHeight(y);
-		updateHeight(x);
-		return x;
-	}
-
 	private Node rebalance(Node z) {
 		updateHeight(z);
 		int balance = getBalance(z);
@@ -176,6 +156,26 @@ public class AVLTree<T extends Comparable<T>> implements Treeable<T> {
 		}
 
 		return z;
+	}
+
+	private Node rotateLeft(Node y) {
+		Node x = y.right;
+		Node z = x.left;
+		x.left = y;
+		y.right = z;
+		updateHeight(y);
+		updateHeight(x);
+		return x;
+	}
+
+	private Node rotateRight(Node y) {
+		Node x = y.left;
+		Node z = x.right;
+		x.right = y;
+		y.left = z;
+		updateHeight(y);
+		updateHeight(x);
+		return x;
 	}
 
 	private int getHeight(Node current) {
