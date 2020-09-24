@@ -1,7 +1,6 @@
 package ru.mirea.n01pr10;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BinaryTree<T extends Comparable<T>> implements Treeable<T> {
