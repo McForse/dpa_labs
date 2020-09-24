@@ -1,14 +1,11 @@
 package ru.mirea.n01pr10;
 
-public abstract class AbstractNode<T> {
-	T value;
-	AbstractNode<T> left;
-	AbstractNode<T> right;
+public class Node<T> {
+	protected T value;
+	protected Node<T> left;
+	protected Node<T> right;
 
-	public AbstractNode() {
-	}
-
-	public AbstractNode(T value) {
+	public Node(T value) {
 		this.value = value;
 	}
 
