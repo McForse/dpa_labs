@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Main {
 
-	private static final String SEPARATOR = "-----";
+	public static final String SEPARATOR = "-----";
 
     public static void main(String[] args) {
     	System.out.println("Binary tree:");

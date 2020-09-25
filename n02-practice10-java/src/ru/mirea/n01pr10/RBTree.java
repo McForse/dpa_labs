@@ -2,6 +2,7 @@ package ru.mirea.n01pr10;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class RBTree<T extends Comparable<T>> implements Treeable<T> {
 	private Node root;
@@ -237,14 +238,14 @@ public class RBTree<T extends Comparable<T>> implements Treeable<T> {
 
 	private void print(Node current, int level) {
 		if (current != null) {
-			print(current.left, level + 1);
+			print(current.right, level + 1);
 
 			for (int i = 0; i < level; i++) {
 				System.out.print("	");
 			}
 
 			System.out.println(current.color == Color.RED ? ANSI_RED + current : ANSI_RESET + current);
-			print(current.right, level + 1);
+			print(current.left, level + 1);
 		}
 	}
 
@@ -273,6 +274,27 @@ public class RBTree<T extends Comparable<T>> implements Treeable<T> {
 	}
 
 	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Input nodes:");
+		String str = sc.nextLine();
+		RBTree<Integer> tree = new RBTree<>();
+
+		while (!str.equals("stop")) {
+			try {
+				tree.add(Integer.parseInt(str));
+			} catch (Exception e) {
+				System.out.println("Incorrect input");
+				str = sc.nextLine();
+				continue;
+			}
+
+			tree.print();
+			str = sc.nextLine();
+		}
+	}
+
+	// Testing
+	/*public static void main(String[] args) {
 		RBTree<Integer> tree = new RBTree<>();
 		tree.add(10);
 		tree.add(5);
@@ -293,5 +315,5 @@ public class RBTree<T extends Comparable<T>> implements Treeable<T> {
 		tree.add(14);
 		tree.add(3);
 		tree.print();
-	}
+	}*/
 }

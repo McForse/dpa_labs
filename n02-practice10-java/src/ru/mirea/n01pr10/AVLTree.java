@@ -2,6 +2,7 @@ package ru.mirea.n01pr10;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class AVLTree<T extends Comparable<T>> implements Treeable<T> {
 	private Node root;
@@ -102,14 +103,14 @@ public class AVLTree<T extends Comparable<T>> implements Treeable<T> {
 
 	private void print(Node current, int level) {
 		if (current != null) {
-			print(current.left, level + 1);
+			print(current.right, level + 1);
 
 			for (int i = 0; i < level; i++) {
 				System.out.print("	");
 			}
 
 			System.out.println(current);
-			print(current.right, level + 1);
+			print(current.left, level + 1);
 		}
 	}
 
@@ -187,6 +188,26 @@ public class AVLTree<T extends Comparable<T>> implements Treeable<T> {
 	}
 
 	private int getBalance(Node current) {
-		return (current == null) ? 0 : getHeight(current.right) - getHeight(current.left);
+		return current == null ? 0 : getHeight(current.right) - getHeight(current.left);
+	}
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Input nodes:");
+		String str = sc.nextLine();
+		AVLTree<Integer> tree = new AVLTree<>();
+
+		while (!str.equals("stop")) {
+			try {
+				tree.add(Integer.parseInt(str));
+			} catch (Exception e) {
+				System.out.println("Incorrect input");
+				str = sc.nextLine();
+				continue;
+			}
+
+			tree.print();
+			str = sc.nextLine();
+		}
 	}
 }
