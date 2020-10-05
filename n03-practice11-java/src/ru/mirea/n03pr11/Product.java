@@ -1,7 +1,5 @@
 package ru.mirea.n03pr11;
 
-import java.util.Objects;
-
 public class Product {
 	private int code;
 	private String name;

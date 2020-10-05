@@ -1,9 +1,17 @@
 package ru.mirea.n03pr11;
 
+/**
+ * Реализация хеш-таблицы.
+ * Разрешение коллизий методом цепочек
+ */
 public class MyHashTable {
+	private static final int DEFAULT_CAPACITY = 16;
 	private Node[] table;
 	private int capacity;
 
+	/**
+	 * Структура элемента в таблице
+	 */
 	class Node {
 		Object value;
 		Node next;
@@ -27,6 +35,16 @@ public class MyHashTable {
 		}
 	}
 
+	/**
+	 * Конструктор без параметров
+	 */
+	public MyHashTable() {
+		this(DEFAULT_CAPACITY);
+	}
+
+	/**
+	 * Конструктор с установкой размера таблицы
+	 */
 	public MyHashTable(int capacity) {
 		this.capacity = capacity;
 		table = new Node[capacity];
@@ -36,8 +54,11 @@ public class MyHashTable {
 		}
 	}
 
+	/**
+	 * Добавление элемента в таблицу
+	 */
 	public void add(Object value) {
-		int hash = value.hashCode() % capacity;
+		int hash = hash(value);
 
 		if (table[hash] == null) {
 			table[hash] = new Node(value);
@@ -52,8 +73,11 @@ public class MyHashTable {
 		}
 	}
 
+	/**
+	 * Проверка содержание элемента в таблице
+	 */
 	public boolean contains(Object value) {
-		int hash = value.hashCode() % capacity;
+		int hash = hash(value);
 		Node current = table[hash];
 
 		while (current != null && !current.value.equals(value)) {
@@ -63,8 +87,11 @@ public class MyHashTable {
 		return current != null;
 	}
 
+	/**
+	 * Удаление элемента из таблицы
+	 */
 	public boolean remove(Object value) {
-		int hash = value.hashCode() % capacity;
+		int hash = hash(value);
 		Node current = table[hash];
 
 		if (current == null) {
@@ -91,6 +118,20 @@ public class MyHashTable {
 		return false;
 	}
 
+	private int hash(Object value) {
+		return (value.hashCode() * 37) % capacity;
+	}
+
+	/**
+	 * Вывод хеш-таблицы
+	 */
+	public void print() {
+		System.out.println(toString());
+	}
+
+	/**
+	 * Преобразование хеш-таблицы в строку
+	 */
 	public String toString() {
 		StringBuilder res = new StringBuilder();
 
