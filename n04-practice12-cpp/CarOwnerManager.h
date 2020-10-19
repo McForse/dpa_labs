@@ -1,14 +1,35 @@
-//
-// Created by Данил Ворожейкин on 19.10.2020.
-//
+#ifndef CAROWNERMANAGER_H
+#define CAROWNERMANAGER_H
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include "CarOwner.h"
 
-#ifndef N04_PRACTICE12_CPP_CAROWNERMANAGER_H
-#define N04_PRACTICE12_CPP_CAROWNERMANAGER_H
-
+using namespace std;
 
 class CarOwnerManager {
+public:
+	explicit CarOwnerManager(const string& filename);
 
+	bool deleteItemInFile(int id);
+
+	void printCarsStolen();
+
+	bool setCarStolen(const string &number, bool carStolen);
+
+	void printFileData();
+
+	void fillFileTestData();
+
+private:
+	string filename;
+
+	void saveData(vector<CarOwner> &data);
+
+	void copyDataFromFile(vector<CarOwner> &data);
+
+	static void printCarOwner(const CarOwner &carOwner, int i);
 };
 
 
-#endif //N04_PRACTICE12_CPP_CAROWNERMANAGER_H
+#endif //CAROWNERMANAGER_H

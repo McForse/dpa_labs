@@ -1,14 +1,27 @@
-//
-// Created by Данил Ворожейкин on 19.10.2020.
-//
+#ifndef CAROWNER_H
+#define CAROWNER_H
 
-#ifndef N04_PRACTICE12_CPP_CAROWNER_H
-#define N04_PRACTICE12_CPP_CAROWNER_H
+#include <string>
 
+using namespace std;
 
 class CarOwner {
+public:
+	CarOwner();
 
+	CarOwner(string carNumber,
+			 string carBrand,
+			 string ownerDescription,
+			 bool isCarStolen
+	);
+
+	string carNumber;
+	string carBrand;
+	string ownerDescription;
+	bool carStolen{};
+
+	void show() const;
 };
 
 
-#endif //N04_PRACTICE12_CPP_CAROWNER_H
+#endif //CAROWNER_H
