@@ -30,5 +30,8 @@ build/
 ### VS Code ###
 .vscode/
 
+### CLion ###
+cmake-build-*/
+
 ### macOS ###
 .DS_Store
